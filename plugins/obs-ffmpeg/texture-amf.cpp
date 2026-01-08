@@ -1164,7 +1164,7 @@ static void amf_avc_defaults(obs_data_t *settings)
 {
 	obs_data_set_default_string(settings, "rate_control", "CBR");
 	obs_data_set_default_int(settings, "bitrate", 6000);
-	obs_data_set_default_int(settings, "cqp", 20);
+	//obs_data_set_default_int(settings, "cqp", 20);
 	obs_data_set_default_string(settings, "preset", "quality");
 	obs_data_set_default_string(settings, "profile", "high");
 	obs_data_set_default_int(settings, "bf", 2);
@@ -1384,7 +1384,7 @@ static inline void adjust_recommended_avc_defaults(amf_base *enc, obs_data_t *se
 	if ((enc->cx * enc->cy > 1920 * 1088) || (framerate > 60)) {
 		// Recommended base defaults
 		obs_data_set_default_int(settings, "bitrate", 2500);
-		obs_data_set_default_int(settings, "cqp", 20);
+		//obs_data_set_default_int(settings, "cqp", 20);
 		obs_data_set_default_string(settings, "rate_control", "CBR");
 		obs_data_set_default_string(settings, "preset", "quality");
 		obs_data_set_default_string(settings, "profile", "high");
@@ -1842,7 +1842,7 @@ static inline void adjust_recommended_hevc_defaults(amf_base *enc, obs_data_t *s
 	if ((enc->cx * enc->cy > 1920 * 1088) || is10bit || (framerate > 60)) {
 		// Recommended base defaults
 		obs_data_set_default_int(settings, "bitrate", 2500);
-		obs_data_set_default_int(settings, "cqp", 20);
+		//obs_data_set_default_int(settings, "cqp", 20);
 		obs_data_set_default_string(settings, "preset", "quality");
 		info("Original base default settings were used according to resolution and framerate.");
 	}
@@ -2093,7 +2093,7 @@ static void amf_hevc_defaults(obs_data_t *settings)
 {
 	obs_data_set_default_string(settings, "rate_control", "CBR");
 	obs_data_set_default_int(settings, "bitrate", 2500);
-	obs_data_set_default_int(settings, "cqp", 20);
+	//obs_data_set_default_int(settings, "cqp", 20);
 	obs_data_set_default_string(settings, "preset", "quality");
 }
 
@@ -2246,7 +2246,7 @@ static inline void adjust_recommended_av1_defaults(amf_base *enc, obs_data_t *se
 	if ((enc->cx * enc->cy > 1920 * 1088) || is10bit || (framerate > 60)) {
 		// Recommended base defaults
 		obs_data_set_default_int(settings, "bitrate", 2500);
-		obs_data_set_default_int(settings, "cqp", 20);
+		//obs_data_set_default_int(settings, "cqp", 20);
 		obs_data_set_default_string(settings, "preset", "balanced");
 		obs_data_set_default_string(settings, "profile", "main");
 		obs_data_set_default_int(settings, "bf", 0);
@@ -2493,7 +2493,7 @@ try {
 static void amf_av1_defaults(obs_data_t *settings)
 {
 	obs_data_set_default_int(settings, "bitrate", 6000);
-	obs_data_set_default_int(settings, "cqp", 20);
+	//obs_data_set_default_int(settings, "cqp", 20);
 	obs_data_set_default_string(settings, "rate_control", "CBR");
 	obs_data_set_default_string(settings, "preset", "highQuality");
 	obs_data_set_default_int(settings, "bf", 2);
