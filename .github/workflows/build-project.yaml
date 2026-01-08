@@ -56,11 +56,54 @@ jobs:
             echo "${key}=${value}" >> $GITHUB_OUTPUT
           done
           echo "commitHash=${GITHUB_SHA:0:9}" >> $GITHUB_OUTPUT
+  windows-build:
+    name: Windows 🪟
+    strategy:
+      matrix:
+        architecture: [x64, arm64]
+    runs-on: windows-2022
+    needs: check-event
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
 
+      - name: Build OBS Studio 🧱
+        uses: ./.github/actions/build-obs
+        env:
+          TWITCH_CLIENTID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_HASH: ${{ secrets.TWITCH_HASH }}
+          RESTREAM_CLIENTID: ${{ secrets.RESTREAM_CLIENTID }}
+          RESTREAM_HASH: ${{ secrets.RESTREAM_HASH }}
+          YOUTUBE_CLIENTID: ${{ secrets.YOUTUBE_CLIENTID }}
+          YOUTUBE_CLIENTID_HASH: ${{ secrets.YOUTUBE_CLIENTID_HASH }}
+          YOUTUBE_SECRET: ${{ secrets.YOUTUBE_SECRET }}
+          YOUTUBE_SECRET_HASH: ${{ secrets.YOUTUBE_SECRET_HASH }}
+          GPU_PRIORITY_VAL: ${{ secrets.GPU_PRIORITY_VAL }}
+        with:
+          target: ${{ matrix.architecture }}
+          config: ${{ needs.check-event.outputs.config }}
+
+      - name: Package OBS Studio 📀
+        uses: ./.github/actions/package-obs
+        with:
+          target: ${{ matrix.architecture }}
+          config: ${{ needs.check-event.outputs.config }}
+          package: ${{ fromJSON(needs.check-event.outputs.package) }}
+
+      - name: Upload Artifacts 📡
+        uses: actions/upload-artifact@v4
+        with:
+          name: obs-studio-windows-${{ matrix.architecture }}-${{ needs.check-event.outputs.commitHash }}
+          path: ${{ github.workspace }}/build_${{ matrix.architecture }}/obs-studio-*-windows-${{ matrix.architecture }}.zip
   macos-build:
     name: macOS 🍏
     runs-on: macos-15
-    needs: check-event
+    needs: [check-event, windows-build]
     strategy:
       fail-fast: false
       matrix:
@@ -174,7 +217,7 @@ jobs:
       matrix:
         os: [ubuntu-24.04]
     runs-on: ${{ matrix.os }}
-    needs: check-event
+    needs: [check-event, windows-build]
     defaults:
       run:
         shell: bash
@@ -242,7 +285,7 @@ jobs:
   flatpak-build:
     name: Flatpak 📦
     runs-on: ubuntu-24.04
-    needs: check-event
+    needs: [check-event, windows-build]
     defaults:
       run:
         shell: bash
@@ -367,47 +410,3 @@ jobs:
           artifact: repo
           path: repo
 
-  windows-build:
-    name: Windows 🪟
-    strategy:
-      matrix:
-        architecture: [x64, arm64]
-    runs-on: windows-2022
-    needs: check-event
-    defaults:
-      run:
-        shell: pwsh
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 0
-
-      - name: Build OBS Studio 🧱
-        uses: ./.github/actions/build-obs
-        env:
-          TWITCH_CLIENTID: ${{ secrets.TWITCH_CLIENT_ID }}
-          TWITCH_HASH: ${{ secrets.TWITCH_HASH }}
-          RESTREAM_CLIENTID: ${{ secrets.RESTREAM_CLIENTID }}
-          RESTREAM_HASH: ${{ secrets.RESTREAM_HASH }}
-          YOUTUBE_CLIENTID: ${{ secrets.YOUTUBE_CLIENTID }}
-          YOUTUBE_CLIENTID_HASH: ${{ secrets.YOUTUBE_CLIENTID_HASH }}
-          YOUTUBE_SECRET: ${{ secrets.YOUTUBE_SECRET }}
-          YOUTUBE_SECRET_HASH: ${{ secrets.YOUTUBE_SECRET_HASH }}
-          GPU_PRIORITY_VAL: ${{ secrets.GPU_PRIORITY_VAL }}
-        with:
-          target: ${{ matrix.architecture }}
-          config: ${{ needs.check-event.outputs.config }}
-
-      - name: Package OBS Studio 📀
-        uses: ./.github/actions/package-obs
-        with:
-          target: ${{ matrix.architecture }}
-          config: ${{ needs.check-event.outputs.config }}
-          package: ${{ fromJSON(needs.check-event.outputs.package) }}
-
-      - name: Upload Artifacts 📡
-        uses: actions/upload-artifact@v4
-        with:
-          name: obs-studio-windows-${{ matrix.architecture }}-${{ needs.check-event.outputs.commitHash }}
-          path: ${{ github.workspace }}/build_${{ matrix.architecture }}/obs-studio-*-windows-${{ matrix.architecture }}.zip
