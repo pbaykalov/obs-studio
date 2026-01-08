@@ -1338,10 +1338,10 @@ static void amf_avc_update_data(amf_base *enc, int rc, int64_t bitrate, int64_t 
 			set_avc_property(enc, VBV_BUFFER_SIZE, (bitrate / framerate) * 1.1);
 		}
 	} else {
-		set_avc_property(enc, QP_I, qp);
-		set_avc_property(enc, QP_P, qp);
-		set_avc_property(enc, QP_B, qp);
-		set_avc_property(enc, QVBR_QUALITY_LEVEL, qp);
+		//set_avc_property(enc, QP_I, qp);
+		//set_avc_property(enc, QP_P, qp);
+		//set_avc_property(enc, QP_B, qp);
+		//set_avc_property(enc, QVBR_QUALITY_LEVEL, qp);
 	}
 }
 
@@ -1796,9 +1796,9 @@ static void amf_hevc_update_data(amf_base *enc, int rc, int64_t bitrate, int64_t
 			set_hevc_property(enc, VBV_BUFFER_SIZE, (bitrate / framerate) * 1.1);
 		}
 	} else {
-		set_hevc_property(enc, QP_I, qp);
-		set_hevc_property(enc, QP_P, qp);
-		set_hevc_property(enc, QVBR_QUALITY_LEVEL, qp);
+		//set_hevc_property(enc, QP_I, qp);
+		//set_hevc_property(enc, QP_P, qp);
+		//set_hevc_property(enc, QVBR_QUALITY_LEVEL, qp);
 	}
 }
 
@@ -2199,10 +2199,10 @@ static void amf_av1_update_data(amf_base *enc, int rc, int64_t bitrate, int64_t 
 		}
 	} else {
 		int64_t qp = cq_value * 4;
-		set_av1_property(enc, QVBR_QUALITY_LEVEL, qp / 4);
-		set_av1_property(enc, Q_INDEX_INTRA, qp);
-		set_av1_property(enc, Q_INDEX_INTER, qp);
-		set_av1_property(enc, Q_INDEX_INTER_B, qp);
+		//set_av1_property(enc, QVBR_QUALITY_LEVEL, qp / 4);
+		//set_av1_property(enc, Q_INDEX_INTRA, qp);
+		//set_av1_property(enc, Q_INDEX_INTER, qp);
+		//set_av1_property(enc, Q_INDEX_INTER_B, qp);
 	}
 }
 
