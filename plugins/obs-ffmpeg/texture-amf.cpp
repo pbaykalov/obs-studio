@@ -1323,6 +1323,12 @@ static void amf_avc_update_data(amf_base *enc, int rc, int64_t bitrate, int64_t 
 {
 	if (rc != AMF_VIDEO_ENCODER_RATE_CONTROL_METHOD_CONSTANT_QP &&
 	    rc != AMF_VIDEO_ENCODER_RATE_CONTROL_METHOD_QUALITY_VBR) {
+		set_avc_property(enc, QP_I, -1);
+		set_avc_property(enc, QP_P, -1);
+		set_avc_property(enc, QP_B, -1);
+		set_avc_property(enc, QVBR_QUALITY_LEVEL, -1);
+
+		
 		set_avc_property(enc, TARGET_BITRATE, bitrate);
 		set_avc_property(enc, PEAK_BITRATE, bitrate);
 		set_avc_property(enc, VBV_BUFFER_SIZE, bitrate);
@@ -1781,6 +1787,10 @@ static void amf_hevc_update_data(amf_base *enc, int rc, int64_t bitrate, int64_t
 {
 	if (rc != AMF_VIDEO_ENCODER_HEVC_RATE_CONTROL_METHOD_CONSTANT_QP &&
 	    rc != AMF_VIDEO_ENCODER_HEVC_RATE_CONTROL_METHOD_QUALITY_VBR) {
+		set_hevc_property(enc, QP_I, -1);
+		set_hevc_property(enc, QP_P, -1);
+		set_hevc_property(enc, QVBR_QUALITY_LEVEL, -1);
+		
 		set_hevc_property(enc, TARGET_BITRATE, bitrate);
 		set_hevc_property(enc, PEAK_BITRATE, bitrate);
 		set_hevc_property(enc, VBV_BUFFER_SIZE, bitrate);
@@ -2183,6 +2193,11 @@ static void amf_av1_update_data(amf_base *enc, int rc, int64_t bitrate, int64_t 
 {
 	if (rc != AMF_VIDEO_ENCODER_AV1_RATE_CONTROL_METHOD_CONSTANT_QP &&
 	    rc != AMF_VIDEO_ENCODER_AV1_RATE_CONTROL_METHOD_QUALITY_VBR) {
+		set_av1_property(enc, QVBR_QUALITY_LEVEL, -1);
+		set_av1_property(enc, Q_INDEX_INTRA, -1);
+		set_av1_property(enc, Q_INDEX_INTER, -1);
+		set_av1_property(enc, Q_INDEX_INTER_B, -1);
+		
 		set_av1_property(enc, TARGET_BITRATE, bitrate);
 		set_av1_property(enc, PEAK_BITRATE, bitrate);
 		set_av1_property(enc, VBV_BUFFER_SIZE, bitrate);
