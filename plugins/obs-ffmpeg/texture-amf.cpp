@@ -17,6 +17,7 @@
 #include <AMF/components/VideoEncoderAV1.h>
 #include <AMF/core/Factory.h>
 #include <AMF/core/Trace.h>
+#include <AMF/core/PropertyStorage.h>
 
 #include <dxgi.h>
 #include <d3d11.h>
@@ -1549,7 +1550,15 @@ static bool amf_avc_init(void *data, obs_data_t *settings)
 	amf_set_codec_level(enc);
 
 	check_preset_compatibility(enc, preset);
-	enc->amf_encoder->ResetDefaultValues();
+	
+	for (auto i = 0; i != enc->amf_encoder->GetPropertiesInfoCount(); ++i){
+            const amf::AMFPropertyInfo *it;
+            auto res= enc->amf_encoder->GetPropertyInfo(i, &it);
+
+            auto info = it;
+
+            enc->amf_encoder->SetProperty(it->name,info->defaultValue);
+        }
 	
 	const char *ffmpeg_opts = obs_data_get_string(settings, "ffmpeg_opts");
 	if (ffmpeg_opts && *ffmpeg_opts) {
