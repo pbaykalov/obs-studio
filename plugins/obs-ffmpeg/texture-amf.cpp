@@ -1549,7 +1549,8 @@ static bool amf_avc_init(void *data, obs_data_t *settings)
 	amf_set_codec_level(enc);
 
 	check_preset_compatibility(enc, preset);
-
+	enc->Clear();
+	
 	const char *ffmpeg_opts = obs_data_get_string(settings, "ffmpeg_opts");
 	if (ffmpeg_opts && *ffmpeg_opts) {
 		struct obs_options opts = obs_parse_options(ffmpeg_opts);
